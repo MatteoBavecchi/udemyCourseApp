@@ -8,11 +8,7 @@ import { Recipe } from "./recipe.model";
 @Injectable()
 export class RecipeService {
     recipesChanged = new Subject<Recipe[]>();
-
-    private recipes: Recipe[] = [
-        new Recipe("pasta", "buonissima", "https://via.placeholder.com/150", [new Ingredient("uovo", 1), new Ingredient("farina", 2)]),
-        new Recipe("Carne", "Abbastanza buona", "https://via.placeholder.com/150", [new Ingredient("carne", 1), new Ingredient("latte", 2)])
-    ];
+    private recipes: Recipe[] = [];
 
     constructor(private slService: ShoppingListService) { }
 
@@ -40,6 +36,11 @@ export class RecipeService {
 
     deleteRecipe(index: number) {
         this.recipes.splice(index, 1);
+        this.recipesChanged.next(this.recipes.slice());
+    }
+
+    setRecipes(recipes: Recipe[]) {
+        this.recipes = recipes;
         this.recipesChanged.next(this.recipes.slice());
     }
 }
