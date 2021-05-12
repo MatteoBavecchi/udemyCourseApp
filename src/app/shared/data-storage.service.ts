@@ -19,7 +19,6 @@ export class DataStorageService {
     }
 
     fetchRecipes() {
-
         return this.http
             .get<Recipe[]>('https://angular-7ecfc-default-rtdb.europe-west1.firebasedatabase.app/recipes.json'
             )
