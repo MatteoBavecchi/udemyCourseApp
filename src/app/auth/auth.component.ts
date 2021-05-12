@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable, onErrorResumeNext } from "rxjs";
 import { AuthService, AuthResponseData } from "./auth.service";
 
@@ -9,7 +10,7 @@ import { AuthService, AuthResponseData } from "./auth.service";
 })
 export class AuthComponent {
 
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService, private router: Router) { }
 
     isLoginMode = true;
     isLoading = false;
@@ -29,20 +30,22 @@ export class AuthComponent {
         let authObs: Observable<AuthResponseData>;
 
         this.isLoading = true;
+
         if (this.isLoginMode) {
             authObs = this.authService.login(email, password);
         } else {
             authObs = this.authService.signup(email, password);
         }
 
-        authObs.subscribe(responseData => {
-            console.log(responseData);
-            this.isLoading = false;
-        }, errorMessage => {
-            console.log(errorMessage);
-            this.error = errorMessage;
-            this.isLoading = false;
-        });
+        authObs.subscribe(
+            responseData => {
+                console.log(responseData);
+                this.isLoading = false;
+            }, errorMessage => {
+                console.log(errorMessage);
+                this.error = errorMessage;
+                this.isLoading = false;
+            });
 
         form.reset();
     }
